@@ -38,6 +38,9 @@
 
 ---
 
+🔗 Live Demo: [https://inventorypal.onrender.com](https://inventorypal.onrender.com)
+
+---
 
 ## 🚀 Getting Started
 
@@ -61,6 +64,7 @@ source venv/bin/activate  # macOS/Linux
 
 # Install Flask
 pip install flask
+
 
 
 
