@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Charts{% endblock %}
+{% block content %}
+<h2>Inventory Charts</h2>
+<canvas id="vendorChart" height="100"></canvas>
+<canvas id="dateChart" height="100" class="mt-4"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  new Chart(document.getElementById('vendorChart'), {
+    type: 'bar',
+    data: {
+      labels: {{ vendor_data | map(attribute=0) | list | tojson }},
+      datasets: [{ label: 'Vendor Qty', data: {{ vendor_data | map(attribute=1) | list | tojson }}, backgroundColor: 'blue' }]
+    }
+  });
+  new Chart(document.getElementById('dateChart'), {
+    type: 'line',
+    data: {
+      labels: {{ date_data | map(attribute=0) | list | tojson }},
+      datasets: [{ label: 'By Date', data: {{ date_data | map(attribute=1) | list | tojson }}, borderColor: 'green', fill: false }]
+    }
+  });
+</script>
+{% endblock %}

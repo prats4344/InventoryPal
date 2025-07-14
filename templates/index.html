@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}➕ Add Product{% endblock %}
+
+{% block content %}
+<h2>➕ Add New Product</h2>
+
+<div class="card shadow p-4">
+  <form method="POST" action="/add">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">📦 Product ID (Scan barcode)</label>
+        <input type="text" name="product_id" id="barcodeInput" class="form-control" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">📝 Product Name</label>
+        <input type="text" name="product_name" class="form-control" required>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">🔢 Quantity</label>
+        <input type="number" name="quantity" class="form-control" required>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">📅 Arrival Date</label>
+        <input type="date" name="arrival_date" class="form-control" required>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">🏷️ Vendor</label>
+        <input type="text" name="source" class="form-control" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">📦 Box ID</label>
+        <input type="text" name="box_id" class="form-control" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">💰 Unit Price (₹)</label>
+        <input type="number" name="unit_price" step="0.01" class="form-control" required>
+      </div>
+      <div class="col-12 d-grid">
+        <button class="btn btn-success">✅ Add Product</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- Scanner -->
+<h5 class="mt-5">📷 Barcode Scanner</h5>
+<video id="scanner" style="width: 100%; max-width: 480px;"></video>
+<audio id="beep" src="{{ url_for('static', filename='sounds/beep-07a.wav') }}"></audio>
+
+<script src="https://unpkg.com/@zxing/library@latest"></script>
+<script>
+  const selectedDeviceId = null;
+  const codeReader = new ZXing.BrowserMultiFormatReader();
+  const beep = document.getElementById("beep");
+
+  codeReader
+    .listVideoInputDevices()
+    .then((videoInputDevices) => {
+      const firstDeviceId = videoInputDevices[0].deviceId;
+      return codeReader.decodeFromVideoDevice(firstDeviceId, "scanner", (result, err) => {
+        if (result) {
+          document.getElementById("barcodeInput").value = result.text;
+          beep.play();
+        }
+      });
+    })
+    .catch((err) => console.error(err));
+</script>
+{% endblock %}
+

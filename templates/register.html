@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}📝 Register{% endblock %}
+
+{% block content %}
+<h2>📝 Create an Account</h2>
+
+<div class="card shadow p-4 mt-3">
+  <form method="POST">
+    <div class="mb-3">
+      <label class="form-label">👤 Username</label>
+      <input type="text" name="username" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">🔑 Password</label>
+      <input type="password" name="password" class="form-control" required>
+    </div>
+    <div class="d-grid">
+      <button class="btn btn-success">✅ Register</button>
+    </div>
+    <p class="mt-3 text-center">Already registered? <a href="/login">Login</a></p>
+  </form>
+</div>
+{% endblock %}
+
+

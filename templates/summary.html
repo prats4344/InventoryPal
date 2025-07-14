@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}📊 Summary Dashboard{% endblock %}
+
+{% block content %}
+<h2>📊 Inventory Summary</h2>
+
+<div class="card shadow p-4 mb-4">
+  <form method="GET" class="row g-3">
+    <div class="col-md-4">
+      <label class="form-label">🧾 Filter by Vendor</label>
+      <input type="text" name="vendor" class="form-control" placeholder="Vendor name" value="{{ request.args.get('vendor', '') }}">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">📅 Start Date</label>
+      <input type="date" name="start_date" class="form-control" value="{{ request.args.get('start_date', '') }}">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">📅 End Date</label>
+      <input type="date" name="end_date" class="form-control" value="{{ request.args.get('end_date', '') }}">
+    </div>
+    <div class="col-md-2 d-grid">
+      <label class="form-label invisible">Button</label>
+      <button type="submit" class="btn btn-primary">🔍 Filter</button>
+    </div>
+  </form>
+</div>
+
+<!-- Table -->
+<div class="table-responsive">
+  <table class="table table-bordered table-striped table-hover align-middle text-center">
+    <thead class="table-dark">
+      <tr>
+        <th>📦 Product Name</th>
+        <th>🔢 Total Quantity</th>
+        <th>💰 Total Value (₹)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in summary_data %}
+      <tr>
+        <td>{{ row[0] }}</td>
+        <td>{{ row[1] }}</td>
+        <td>₹{{ "%.2f"|format(row[2]) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Charts -->
+<div class="row mt-5">
+  <div class="col-md-6 mb-4">
+    <h5>📊 Quantity by Product</h5>
+    <canvas id="quantityChart"></canvas>
+  </div>
+  <div class="col-md-6 mb-4">
+    <h5>💰 Value by Product</h5>
+    <canvas id="valueChart"></canvas>
+  </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const labels = {{ chart_labels|tojson }};
+  const quantities = {{ chart_quantities|tojson }};
+  const values = {{ chart_values|tojson }};
+
+  const ctx1 = document.getElementById('quantityChart');
+  new Chart(ctx1, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Total Quantity',
+        data: quantities,
+        backgroundColor: '#0d6efd'
+      }]
+    }
+  });
+
+  const ctx2 = document.getElementById('valueChart');
+  new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Total Value (₹)',
+        data: values,
+        backgroundColor: '#198754'
+      }]
+    }
+  });
+</script>
+{% endblock %}
+
+
